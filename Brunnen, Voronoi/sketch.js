@@ -1,4 +1,5 @@
 let geodata = [];
+let welldata = [];
 let colorScale = d3
   .scaleSequential()
   //.range(0,1)
@@ -15,6 +16,7 @@ let bounds = {
 };
 function preload() {
   geodata = loadJSON('lucerne-roads.geojson')
+  welldata = loadJSON('luzern-brunnen.json')
 
 }
 function setup() {
@@ -23,12 +25,15 @@ function setup() {
   noLoop();
   pixelDensity(3)
   angleMode(DEGREES);
-  textAlign(CENTER)
-
+  textAlign(CENTER);
+wells = welldata.features
+console.log(wells.length)
 }
 
 function draw() {
   background(250);
+
+
   let parseLength = roadData.length
   for (let i = 0; i < parseLength; i++) {
     let roadObject = roadData[i];
@@ -36,7 +41,7 @@ function draw() {
     let coordinates = geometry.coordinates;
     let strassenNames = roadObject.properties
     let strassen = strassenNames.name
-    //console.log(strassen)
+   
 
     noFill()
 
@@ -51,6 +56,16 @@ function draw() {
     
      
     }
+for (let k = 0; k<wells.length; k++){
 
+    wellcoords = wells[k].GeoLocation
+    wellx = map(wellcoords.longitude, bounds.left,bounds.right,0,width)
+    welly = map(wellcoords.latitude, bounds.top,bounds.bottom,0,height)
+
+    console.log(wellx,welly)
+    fill('red')
+    circle(wellx,welly,10)
+    //d3.geom.voronoi(wellx,welly).polygons();
+}
   }
 
